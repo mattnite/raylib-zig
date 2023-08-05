@@ -8,7 +8,6 @@
 const std = @import("std");
 const Build = std.Build;
 const CompileStep = Build.CompileStep;
-const raylib = @import("raylib");
 
 const Program = struct {
     name: []const u8,
@@ -19,6 +18,22 @@ const Program = struct {
 pub fn build(b: *Build) void {
     const optimize = b.standardOptimizeOption(.{});
     const target = b.standardTargetOptions(.{});
+
+    const raylib_dep = b.dependency("raylib", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const raylib_mod = b.addModule("raylib", .{
+        .source_file = .{ .path = "lib/raylib-zig.zig" },
+    });
+
+    const raylib_math_mod = b.addModule("raylib-math", .{
+        .source_file = .{ .path = "lib/raylib-zig-math.zig" },
+        .dependencies = &.{
+            .{ .name = "raylib", .module = raylib_mod },
+        },
+    });
 
     const examples = [_]Program{
         .{
@@ -84,9 +99,13 @@ pub fn build(b: *Build) void {
             .optimize = optimize,
         });
 
-        link(b, exe, system_lib);
-        addAsPackage("raylib", exe);
-        math.addAsPackage("raylib-math", exe);
+        if (system_lib)
+            exe.linkSystemLibrary("raylib")
+        else
+            exe.linkLibrary(raylib_dep.artifact("raylib"));
+
+        exe.addModule("raylib", raylib_mod);
+        exe.addModule("raylib-math", raylib_math_mod);
 
         const exe_run = b.addRunArtifact(exe);
         const exe_run_step = b.step(ex.name, ex.desc);
@@ -94,66 +113,3 @@ pub fn build(b: *Build) void {
         examples_step.dependOn(&exe.step);
     }
 }
-
-fn getSrcDir() []const u8 {
-    return std.fs.path.dirname(@src().file) orelse ".";
-}
-
-pub fn link(b: *Build, exe: *CompileStep, system_lib: bool) void {
-    if (system_lib) {
-        exe.linkSystemLibrary("raylib");
-        return;
-    } else {
-        exe.linkLibrary(raylib.addRaylib(b, exe.target, exe.optimize));
-    }
-
-    const target_os = exe.target.toTarget().os.tag;
-    switch (target_os) {
-        .windows => {
-            exe.linkSystemLibrary("winmm");
-            exe.linkSystemLibrary("gdi32");
-            exe.linkSystemLibrary("opengl32");
-        },
-        .macos => {
-            exe.linkFramework("OpenGL");
-            exe.linkFramework("Cocoa");
-            exe.linkFramework("IOKit");
-            exe.linkFramework("CoreAudio");
-            exe.linkFramework("CoreVideo");
-        },
-        .freebsd, .openbsd, .netbsd, .dragonfly => {
-            exe.linkSystemLibrary("GL");
-            exe.linkSystemLibrary("rt");
-            exe.linkSystemLibrary("dl");
-            exe.linkSystemLibrary("m");
-            exe.linkSystemLibrary("X11");
-            exe.linkSystemLibrary("Xrandr");
-            exe.linkSystemLibrary("Xinerama");
-            exe.linkSystemLibrary("Xi");
-            exe.linkSystemLibrary("Xxf86vm");
-            exe.linkSystemLibrary("Xcursor");
-        },
-        else => { // linux and possibly others
-            exe.linkSystemLibrary("GL");
-            exe.linkSystemLibrary("rt");
-            exe.linkSystemLibrary("dl");
-            exe.linkSystemLibrary("m");
-            exe.linkSystemLibrary("X11");
-        },
-    }
-}
-
-const srcdir = getSrcDir();
-
-pub fn addAsPackage(name: []const u8, to: *CompileStep) void {
-    to.addAnonymousModule(name, .{
-        .source_file = .{ .path = srcdir ++ "/lib/raylib-zig.zig" },
-    });
-}
-pub const math = struct {
-    pub fn addAsPackage(name: []const u8, to: *CompileStep) void {
-        to.addAnonymousModule(name, .{
-            .source_file = .{ .path = srcdir ++ "/lib/raylib-zig-math.zig" },
-        });
-    }
-};

@@ -1,4 +1,4 @@
-const rl = @import("raylib-zig.zig");
+const rl = @import("raylib");
 
 const Matrix = rl.Matrix;
 const Quaternion = rl.Quaternion;
@@ -125,5 +125,3 @@ pub extern fn QuaternionFromEuler(pitch: f32, yaw: f32, roll: f32) Quaternion;
 pub extern fn QuaternionToEuler(q: Quaternion) Vector3;
 pub extern fn QuaternionTransform(q: Quaternion, mat: Matrix) Quaternion;
 pub extern fn QuaternionEquals(p: Quaternion, q: Quaternion) c_int;
-
-

@@ -564,5 +564,3 @@ pub extern fn SetAudioStreamBufferSizeDefault(size: c_int) void;
 pub extern fn SetAudioStreamCallback(stream: AudioStream, callback: AudioCallback) void;
 pub extern fn AttachAudioStreamProcessor(stream: AudioStream, processor: AudioCallback) void;
 pub extern fn DetachAudioStreamProcessor(stream: AudioStream, processor: AudioCallback) void;
-
-
