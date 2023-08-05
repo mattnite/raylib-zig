@@ -1,5 +1,5 @@
 const std = @import("std");
-const Builder = std.build.Builder;
+const Build = std.Build;
 const LibExeObjStep = std.build.LibExeObjStep;
 const rl = @import("raylib/src/build.zig");
 
@@ -10,12 +10,12 @@ fn getSrcDir() []const u8 {
     return std.fs.path.dirname(@src().file) orelse ".";
 }
 
-pub fn link(exe: *LibExeObjStep, system_lib: bool) void {
+pub fn link(b: *Build, exe: *LibExeObjStep, system_lib: bool) void {
     if (system_lib) {
         exe.linkSystemLibrary("raylib");
         return;
     } else {
-        exe.linkLibrary(rl.addRaylib(exe.builder, exe.target));
+        exe.linkLibrary(rl.addRaylib(b, exe.target));
     }
 
     const target_os = exe.target.toTarget().os.tag;
