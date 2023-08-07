@@ -7,6 +7,7 @@ const BoundingBox = rl.BoundingBox;
 const Camera = rl.Camera;
 const Camera2D = rl.Camera2D;
 const Camera3D = rl.Camera3D;
+const CameraMode = rl.CameraMode;
 const Color = rl.Color;
 const ConfigFlags = rl.ConfigFlags;
 const FilePathList = rl.FilePathList;
@@ -236,7 +237,7 @@ pub extern fn GetGestureDragVector() Vector2;
 pub extern fn GetGestureDragAngle() f32;
 pub extern fn GetGesturePinchVector() Vector2;
 pub extern fn GetGesturePinchAngle() f32;
-pub extern fn UpdateCamera(camera: [*c]Camera, mode: c_int) void;
+pub extern fn UpdateCamera(camera: [*c]Camera, mode: CameraMode) void;
 pub extern fn UpdateCameraPro(camera: [*c]Camera, movement: Vector3, rotation: Vector3, zoom: f32) void;
 pub extern fn SetShapesTexture(texture: Texture2D, source: Rectangle) void;
 pub extern fn DrawPixel(posX: c_int, posY: c_int, color: Color) void;
@@ -569,3 +570,5 @@ pub extern fn AttachAudioStreamProcessor(stream: AudioStream, processor: AudioCa
 pub extern fn DetachAudioStreamProcessor(stream: AudioStream, processor: AudioCallback) void;
 pub extern fn AttachAudioMixedProcessor(processor: AudioCallback) void;
 pub extern fn DetachAudioMixedProcessor(processor: AudioCallback) void;
+
+
