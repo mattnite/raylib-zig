@@ -3,8 +3,8 @@
     .version = "0.0.1",
     .dependencies = .{
         .raylib = .{
-            .url = "https://github.com/mattnite/raylib/archive/bc1b8f55510c83d1a8a2c8d8f3792c03066293b3.tar.gz",
-            .hash = "1220160cc37e4240a8cd0729783c3b47a3a5119e9c0c99f90f5a580371057b880201",
+            .url = "https://github.com/mattnite/raylib/archive/9f541c6f27d61c62ae611165db1f986ea56a6935.tar.gz",
+            .hash = "1220a41b26a6e29ed3ef108722cd0ee819b09b71c185831726e572601f91f6b86fc7",
         },
     },
 }

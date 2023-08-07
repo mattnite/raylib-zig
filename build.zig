@@ -8,6 +8,7 @@
 const std = @import("std");
 const Build = std.Build;
 const CompileStep = Build.CompileStep;
+const Dependency = Build.Dependency;
 
 const Program = struct {
     name: []const u8,

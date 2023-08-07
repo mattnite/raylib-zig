@@ -5,14 +5,8 @@ const Quaternion = rl.Quaternion;
 const Vector2 = rl.Vector2;
 const Vector3 = rl.Vector3;
 const Vector4 = rl.Vector4;
-
-pub const float3 = extern struct {
-    v: [3]f32,
-};
-
-pub const float16 = extern struct {
-    v: [16]f32,
-};
+const float16 = rl.float16;
+const float3 = rl.float3;
 
 pub extern fn Clamp(value: f32, min: f32, max: f32) f32;
 pub extern fn Lerp(start: f32, end: f32, amount: f32) f32;
@@ -32,6 +26,7 @@ pub extern fn Vector2DotProduct(v1: Vector2, v2: Vector2) f32;
 pub extern fn Vector2Distance(v1: Vector2, v2: Vector2) f32;
 pub extern fn Vector2DistanceSqr(v1: Vector2, v2: Vector2) f32;
 pub extern fn Vector2Angle(v1: Vector2, v2: Vector2) f32;
+pub extern fn Vector2LineAngle(start: Vector2, end: Vector2) f32;
 pub extern fn Vector2Scale(v: Vector2, scale: f32) Vector2;
 pub extern fn Vector2Multiply(v1: Vector2, v2: Vector2) Vector2;
 pub extern fn Vector2Negate(v: Vector2) Vector2;
